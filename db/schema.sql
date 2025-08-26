@@ -6,14 +6,14 @@ CREATE TABLE autores(
     id_autor INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) NOT NULL,
     nacionalidade VARCHAR(45) NOT NULL,
-    ano_nascimento DATE NOT NULL
+    ano_nascimento INT NOT NULL
 );
 
 CREATE TABLE livros(
     id_livro INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(100) NOT NULL,
     genero VARCHAR(100) NOT NULL,
-    ano_publicacao DATE NOT NULL,
+    ano_publicacao INT NOT NULL,
     fk_autor INT NOT NULL,
     FOREIGN KEY (fk_autor) REFERENCES autores(id_autor)
 );
