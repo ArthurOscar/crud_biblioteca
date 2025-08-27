@@ -35,7 +35,7 @@ echo "<h2>Livros</h2>";
 $filtro = "";
 if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
     $filtro = $_POST['filtro'];
-    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%'";
+    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR id_livro LIKE '%$filtro%'";
 } else {
     $sql = "SELECT * FROM livros";
 }
