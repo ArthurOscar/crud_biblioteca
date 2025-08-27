@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" name="genero" required>
         <br>
         <label for="publicacao">Ano de Publicação:</label>
-        <input type="number" maxlength="4" name="publicacao" required>
+        <input type="number" name="publicacao" required>
         <br>
         <label for="fk_autor">Autor (ID):</label>
         <input type="number" name="fk_autor" required>
