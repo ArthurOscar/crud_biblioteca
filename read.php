@@ -1,7 +1,9 @@
 <?php
 
 include "db.php";
+echo "<div style='display: flex; gap: 20px;'>";
 
+echo "<div>";
 echo "<h2>Autores</h2>";
 $sql = "SELECT * FROM autores";
 $result = $conn->query($sql);
@@ -22,11 +24,13 @@ if ($result->num_rows > 0) {
         <td>{$row['ano_nascimento']}</td>
         </tr>";
     };
-    echo "</table><br>";
+    echo "</table>";
 } else {
     echo "Não foi possivel encontra nenhum autor.<br>";
 }
+echo "</div>";
 
+echo "<div>";
 echo "<h2>Livros</h2>";
 $filtro = "";
 if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
@@ -37,6 +41,11 @@ if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
 }
 $result = $conn->query($sql);
 
+echo "<form method='POST'>
+        <input type='text' name='filtro' placeholder='Filtrar por título, gênero ou ano' value='$filtro'>
+        <button type='submit'>Filtrar</button>
+ </form>";
+
 if ($result->num_rows > 0) {
     echo "<table Border='1'>
         <tr>
@@ -45,10 +54,6 @@ if ($result->num_rows > 0) {
             <th>Gênero</th>
             <th>Ano de Publicação</th>
             <th>ID Autor</th>
-            <th><form method='POST'>
-                    <input type='text' name='filtro' placeholder='Filtrar por título, gênero ou ano' value='$filtro'><br>
-                    <button type='submit'>Filtrar</button>
-             </form><br>
         </tr>";
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
@@ -62,7 +67,9 @@ if ($result->num_rows > 0) {
 } else {
     echo "Não foi possivel encontra nenhum livro.<br>";
 }
+echo "</div>";
 
+echo "<div>";
 echo "<h2>Leitores</h2>";
 $sql = "SELECT * FROM leitores";
 $result = $conn->query($sql);
@@ -83,24 +90,56 @@ if ($result->num_rows > 0) {
         <td>{$row['telefone']}</td>
         </tr>";
     };
-    echo "</table><br>";
+    echo "</table>";
 } else {
     echo "Não foi possivel encontra nenhum leitor.<br>";
 }
+echo "</div>";
 
+echo "<div>";
+echo "<h2>Empréstimos</h2>";
+$sql = "SELECT * FROM emprestimos";
+$result = $conn->query($sql);
+
+$sql_livro = "SELECT titulo FROM livros";
+$result_livro = $conn->query($sql_livro);
+$row_livro = $result_livro->fetch_assoc();
+
+$sql_leitor = "SELECT nome FROM leitores";
+$result_leitor = $conn->query($sql_leitor);
+$row_leitor = $result_leitor->fetch_assoc();
+
+if ($result->num_rows > 0) {
+    echo "<table Border='1'>
+        <tr>
+        <th>ID Empréstimo</th>
+        <th>Data do Empréstimo</th>
+        <th>Data da devolução</th>
+        <th>Livro</th>
+        <th>Leitor</th>
+        </tr>";
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+        <td>{$row['id_emprestimo']}</td>
+        <td>{$row['data_emprestimo']}</td>
+        <td>{$row['data_devolucao']}</td>
+        <td>{$row_livro['titulo']}</td>
+        <td>{$row_leitor['nome']}</td>
+        </tr>";
+    };
+    echo "</table>";
+} else {
+    echo "Não foi possivel encontra nenhum empréstimo.<br>";
+}
+echo "</div>";
+echo "</div>";
+
+include 'create.php';
 ?>
 
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Read</title>
 </head>
-
-<body>
-    <form method="POST">
-    </form>
-</body>
-
-</html>

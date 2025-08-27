@@ -9,10 +9,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO autores (nome, nacionalidade, ano_nascimento) VALUES ('$nome', '$nascionalidade','$nascimento')";
 
         if ($conn->query($sql) === TRUE) {
-            header("Location: create.php");
+            header("Location: read.php");
+            $conn->close();
             exit();
         } else {
             echo "Erro: " . $sql . "<br>" . $conn->error;
+            $conn->close();
+        }
+    }
+    if (isset($_POST["adicionarLivro"])) {
+        $titulo = $_POST["titulo"];
+        $genero = $_POST["genero"];
+        $publicacao = $_POST["publicacao"];
+        $fk_autor = $_POST["fk_autor"];
+
+        if ($publicacao <= '2025' && $publicacao >= '1500') {
+            $sql = "SELECT id_autor FROM autores WHERE id_autor = $fk_autor";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                $sql = "INSERT INTO livros (titulo, genero, ano_publicacao, fk_autor) VALUES ('$titulo', '$genero','$publicacao', '$fk_autor')";
+                if ($conn->query($sql) === TRUE) {
+                    header("Location: read.php");
+                    $conn->close();
+                    exit();
+                } else {
+                    echo "Erro: " . $sql . "<br>" . $conn->error;
+                    $conn->close();
+                }
+            } else {
+                echo "Erro: Autor com ID $fk_autor não existe. <br>" . $conn->error;
+            }
+        } else {
+            echo "Erro: Ano de publicação inválido. Deve estar entre 1500 e 2025.<br>";
         }
     }
     if (isset($_POST["adicionarLeitor"])) {
@@ -23,34 +51,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO leitores (nome, email, telefone) VALUES ('$nome', '$email','$telefone')";
 
         if ($conn->query($sql) === TRUE) {
-            header("Location: create.php");
+            header("Location: read.php");
+            $conn->close();
             exit();
         } else {
             echo "Erro: " . $sql . "<br>" . $conn->error;
+            $conn->close();
         }
     }
-    if (isset($_POST["adicionarLivro"])) {
-        $titulo = $_POST["titulo"];
-        $genero = $_POST["genero"];
-        $publicacao = $_POST["publicacao"];
-        $fk_autor = $_POST["fk_autor"];
+    if (isset($_POST["criarEmprestimo"])) {
+        $data_emprestimo = $_POST["data_emprestimo"];
+        $data_devolucao = $_POST["data_devolucao"];
+        $fk_livro = $_POST["fk_livro"];
+        $fk_leitor = $_POST["fk_leitor"];
 
-        if($publicacao <= '2025' && $publicacao >= '1500'){
-            $sql = "SELECT id_autor FROM autores WHERE id_autor = $fk_autor";
+        if ($data_devolucao > $data_emprestimo) {
+            $sql = "SELECT id_livro FROM livros WHERE id_livro = $fk_livro";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
-                $sql = "INSERT INTO livros (titulo, genero, ano_publicacao, fk_autor) VALUES ('$titulo', '$genero','$publicacao', '$fk_autor')";
-                if ($conn->query($sql) === TRUE) {
-                    header("Location: create.php");
-                    exit();
+                $sql = "SELECT id_leitor FROM leitores WHERE id_leitor = $fk_leitor";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor) VALUES ('$data_emprestimo', '$data_devolucao','$fk_livro', '$fk_leitor')";
+                    if ($conn->query($sql) === TRUE) {
+                        header("Location: read.php");
+                        $conn->close();
+                        exit();
+                    } else {
+                        echo "Erro: " . $sql . "<br>" . $conn->error;
+                        $conn->close();
+                    }
                 } else {
-                    echo "Erro: " . $sql . "<br>" . $conn->error;
+                    echo "Erro: Leitor com ID $fk_leitor não existe. <br>" . $conn->error;
                 }
             } else {
-                echo "Erro: Autor com ID $fk_autor não existe. <br>" . $conn->error;
+                echo "Erro: Livro com ID $fk_livro não existe. <br>" . $conn->error;
             }
         } else {
-            echo "Erro: Ano de publicação inválido. Deve estar entre 1500 e 2025.<br>";
+            echo "Erro: Data de devolução deve ser posterior à data de empréstimo.<br>";
         }
     }
 }
@@ -65,48 +103,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <form method="POST">
-        <h2>Adicionar Autor</h2>
-        <label for="nome">Nome:</label>
-        <input type="text" name="nome" required>
-        <br>
-        <label for="nacionalidade">Nacionalidade:</label>
-        <input type="text" name="nacionalidade" required>
-        <br>
-        <label for="nascimento">Ano de nascimento:</label>
-        <input type="number" name="nascimento" required>
-        <br>
-        <button type="submit" name="adicionarAutor">Adicionar Autor</button>
-    </form>
-    <form method="POST">
-        <h2>Adicionar Leitor</h2>
-        <label for="nome">Nome:</label>
-        <input type="text" name="nome" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-        <br>
-        <label for="nascimento">Telefone:</label>
-        <input type="number" name="telefone" required>
-        <br>
-        <button type="submit" name="adicionarLeitor">Adicionar Leitor</button>
-    </form>
-    <form method="POST">
-        <h2>Adicionar Livro</h2>
-        <label for="titulo">Titulo:</label>
-        <input type="text" name="titulo" required>
-        <br>
-        <label for="genero">Genêro:</label>
-        <input type="text" name="genero" required>
-        <br>
-        <label for="publicacao">Ano de Publicação:</label>
-        <input type="number" name="publicacao" required>
-        <br>
-        <label for="fk_autor">Autor (ID):</label>
-        <input type="number" name="fk_autor" required>
-        <br>
-        <button type="submit" name="adicionarLivro">Adicionar Livro</button>
-    </form>
+    <div style="display: flex;">
+        <form method="POST" style="margin-right: 50px;">
+            <h2>Adicionar Autor</h2>
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" required style="margin-top: 5px;">
+            <br>
+            <label for="nacionalidade">Nacionalidade:</label>
+            <input type="text" name="nacionalidade" required style="margin-top: 5px;">
+            <br>
+            <label for="nascimento">Ano de nascimento:</label>
+            <input type="number" name="nascimento" required style="margin-top: 5px;">
+            <br>
+            <button type="submit" name="adicionarAutor" style="margin-top: 5px;">Adicionar Autor</button>
+        </form>
+        <form method="POST" style="margin-right: 50px;">
+            <h2>Adicionar Leitor</h2>
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" required style="margin-top: 5px;">
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required style="margin-top: 5px;">
+            <br>
+            <label for="nascimento">Telefone:</label>
+            <input type="number" name="telefone" required style="margin-top: 5px;">
+            <br>
+            <button type="submit" name="adicionarLeitor" style="margin-top: 5px;">Adicionar Leitor</button>
+        </form>
+        <form method="POST" style="margin-right: 50px;">
+            <h2>Adicionar Livro</h2>
+            <label for="titulo">Titulo:</label>
+            <input type="text" name="titulo" required style="margin-top: 5px;">
+            <br>
+            <label for="genero">Genêro:</label>
+            <input type="text" name="genero" required style="margin-top: 5px;">
+            <br>
+            <label for="publicacao">Ano de Publicação:</label>
+            <input type="number" name="publicacao" required style="margin-top: 5px;">
+            <br>
+            <label for="fk_autor">Autor (ID):</label>
+            <input type="number" name="fk_autor" required style="margin-top: 5px;">
+            <br>
+            <button type="submit" name="adicionarLivro" style="margin-top: 5px;">Adicionar Livro</button>
+        </form>
+        <form method="POST" style="margin-right: 50px;">
+            <h2>Criar Empréstimo</h2>
+            <label for="data_emprestimo">Data do Empréstimo:</label>
+            <input type="date" name="data_emprestimo" required style="margin-top: 5px;">
+            <br>
+            <label for="data_devolucao">Data da Devoulução:</label>
+            <input type="date" name="data_devolucao" required style="margin-top: 5px;">
+            <br>
+            <label for="fk_livro">Livro (ID):</label>
+            <input type="number" name="fk_livro" required style="margin-top: 5px;">
+            <br>
+            <label for="fk_leitor">Leitor (ID):</label>
+            <input type="number" name="fk_leitor" required style="margin-top: 5px;">
+            <br>
+            <button type="submit" name="criarEmprestimo" style="margin-top: 5px;">Criar Empréstimo</button>
+        </form>
+    </div>
 </body>
 
 </html>
