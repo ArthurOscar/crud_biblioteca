@@ -41,7 +41,7 @@ $offset = ($pagina - 1) * $livrosPorPagina;
 $filtro = "";
 if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
     $filtro = $_POST['filtro'];
-    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR autor LIKE '%$filtro%'";
+    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR fk_autor LIKE '%$filtro%'";
     $sqlTotal = "SELECT COUNT(*) as total FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR fk_autor LIKE '%$filtro%'";
 } else {
     $sql = "SELECT * FROM livros LIMIT $livrosPorPagina OFFSET $offset";
