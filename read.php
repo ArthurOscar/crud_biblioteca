@@ -32,12 +32,20 @@ echo "</div>";
 
 echo "<div>";
 echo "<h2>Livros</h2>";
+
+$livrosPorPagina = 5;
+$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+if ($pagina < 1) $pagina = 1;
+$offset = ($pagina - 1) * $livrosPorPagina;
+
 $filtro = "";
 if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
     $filtro = $_POST['filtro'];
-    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR id_livro LIKE '%$filtro%'";
+    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR autor LIKE '%$filtro%'";
+    $sqlTotal = "SELECT COUNT(*) as total FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR fk_autor LIKE '%$filtro%'";
 } else {
-    $sql = "SELECT * FROM livros";
+    $sql = "SELECT * FROM livros LIMIT $livrosPorPagina OFFSET $offset";
+    $sqlTotal = "SELECT COUNT(*) as total FROM livros";
 }
 $result = $conn->query($sql);
 
@@ -67,6 +75,19 @@ if ($result->num_rows > 0) {
 } else {
     echo "Não foi possivel encontra nenhum livro.<br>";
 }
+$totalResult = $conn->query($sqlTotal);
+$totalLivros = $totalResult->fetch_assoc()['total'];
+$totalPaginas = ceil($totalLivros / $livrosPorPagina);
+
+echo "<div style='margin-top:10px;'>";
+for ($i = 1; $i <= $totalPaginas; $i++) {
+    if ($i == $pagina) {
+        echo "$i ";
+    } else {
+        echo "<a href='?pagina=$i'>$i</a> ";
+    }
+}
+echo "</div>";
 echo "</div>";
 
 echo "<div>";
@@ -98,16 +119,37 @@ echo "</div>";
 
 echo "<div>";
 echo "<h2>Empréstimos</h2>";
-$sql = "SELECT * FROM emprestimos";
+
+echo "<form method='POST'>
+        <button type='submit' name='emprestimos_cocluidos' value='todos'>Todos</button>
+        <button type='submit' name='emprestimos_cocluidos' value='sim'>Concluídos</button>
+        <button type='submit' name='emprestimos_cocluidos' value='nao'>Não Concluídos</button>
+ </form>";
+
+$concluidos = $_POST['emprestimos_cocluidos'] ?? 'todos';
+$hoje = date('Y-m-d');
+if ($concluidos == 'sim') {
+    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao,
+               livros.titulo AS livro, leitores.nome AS leitor
+        FROM emprestimos e
+        JOIN livros ON fk_livro = id_livro
+        JOIN leitores ON fk_leitor = id_leitor
+        WHERE data_devolucao < '$hoje'";
+} elseif ($concluidos == 'nao') {
+    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao,
+               livros.titulo AS livro, leitores.nome AS leitor
+        FROM emprestimos e
+        JOIN livros ON fk_livro = id_livro
+        JOIN leitores ON fk_leitor = id_leitor
+        WHERE data_devolucao >= '$hoje'";
+} else {
+    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao,
+               livros.titulo AS livro, leitores.nome AS leitor
+        FROM emprestimos e
+        JOIN livros ON fk_livro = id_livro
+        JOIN leitores ON fk_leitor = id_leitor";
+}
 $result = $conn->query($sql);
-
-$sql_livro = "SELECT titulo FROM livros";
-$result_livro = $conn->query($sql_livro);
-$row_livro = $result_livro->fetch_assoc();
-
-$sql_leitor = "SELECT nome FROM leitores";
-$result_leitor = $conn->query($sql_leitor);
-$row_leitor = $result_leitor->fetch_assoc();
 
 if ($result->num_rows > 0) {
     echo "<table Border='1'>
@@ -119,12 +161,16 @@ if ($result->num_rows > 0) {
         <th>Leitor</th>
         </tr>";
     while ($row = $result->fetch_assoc()) {
+        $data_emprestimo = $row['data_emprestimo'];
+        $data_emprestimo = date('d/m/Y', strtotime($data_emprestimo));
+        $data_devolucao = $row['data_devolucao'];
+        $data_devolucao = date('d/m/Y', strtotime($data_devolucao));
         echo "<tr>
         <td>{$row['id_emprestimo']}</td>
-        <td>{$row['data_emprestimo']}</td>
-        <td>{$row['data_devolucao']}</td>
-        <td>{$row_livro['titulo']}</td>
-        <td>{$row_leitor['nome']}</td>
+        <td>{$data_emprestimo}</td>
+        <td>{$data_devolucao}</td>
+        <td>{$row['livro']}</td>
+        <td>{$row['leitor']}</td>
         </tr>";
     };
     echo "</table>";
@@ -138,6 +184,7 @@ include 'create.php';
 ?>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -118,19 +118,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" name="adicionarAutor" style="margin-top: 5px;">Adicionar Autor</button>
         </form>
         <form method="POST" style="margin-right: 50px;">
-            <h2>Adicionar Leitor</h2>
-            <label for="nome">Nome:</label>
-            <input type="text" name="nome" required style="margin-top: 5px;">
-            <br>
-            <label for="email">Email:</label>
-            <input type="email" name="email" required style="margin-top: 5px;">
-            <br>
-            <label for="nascimento">Telefone:</label>
-            <input type="number" name="telefone" required style="margin-top: 5px;">
-            <br>
-            <button type="submit" name="adicionarLeitor" style="margin-top: 5px;">Adicionar Leitor</button>
-        </form>
-        <form method="POST" style="margin-right: 50px;">
             <h2>Adicionar Livro</h2>
             <label for="titulo">Titulo:</label>
             <input type="text" name="titulo" required style="margin-top: 5px;">
@@ -145,6 +132,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="number" name="fk_autor" required style="margin-top: 5px;">
             <br>
             <button type="submit" name="adicionarLivro" style="margin-top: 5px;">Adicionar Livro</button>
+        </form>
+        <form method="POST" style="margin-right: 50px;">
+            <h2>Adicionar Leitor</h2>
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" required style="margin-top: 5px;">
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required style="margin-top: 5px;">
+            <br>
+            <label for="nascimento">Telefone:</label>
+            <input type="number" name="telefone" required style="margin-top: 5px;">
+            <br>
+            <button type="submit" name="adicionarLeitor" style="margin-top: 5px;">Adicionar Leitor</button>
         </form>
         <form method="POST" style="margin-right: 50px;">
             <h2>Criar Empréstimo</h2>
