@@ -103,66 +103,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div style="display: flex;">
-        <form method="POST" style="margin-right: 50px;">
+    <div style="display: flex; gap: 10%; padding: 20px; ">
+        <form method="POST">
             <h2>Adicionar Autor</h2>
             <label for="nome">Nome:</label>
-            <input type="text" name="nome" required style="margin-top: 5px;">
+            <input type="text" name="nome" class="form-control" required>
             <br>
             <label for="nacionalidade">Nacionalidade:</label>
-            <input type="text" name="nacionalidade" required style="margin-top: 5px;">
+            <input type="text" name="nacionalidade" class="form-control" required>
             <br>
             <label for="nascimento">Ano de nascimento:</label>
-            <input type="number" name="nascimento" required style="margin-top: 5px;">
+            <input type="number" name="nascimento" class="form-control" required>
             <br>
-            <button type="submit" name="adicionarAutor" style="margin-top: 5px;">Adicionar Autor</button>
+            <button type="submit" name="adicionarAutor" class="btn btn-primary">Adicionar Autor</button>
         </form>
-        <form method="POST" style="margin-right: 50px;">
+        <form method="POST">
             <h2>Adicionar Livro</h2>
             <label for="titulo">Titulo:</label>
-            <input type="text" name="titulo" required style="margin-top: 5px;">
+            <input type="text" name="titulo" class="form-control" required>
             <br>
             <label for="genero">Genêro:</label>
-            <input type="text" name="genero" required style="margin-top: 5px;">
+            <input type="text" name="genero" class="form-control" required>
             <br>
             <label for="publicacao">Ano de Publicação:</label>
-            <input type="number" name="publicacao" required style="margin-top: 5px;">
+            <input type="number" name="publicacao" class="form-control" required>
             <br>
             <label for="fk_autor">Autor (ID):</label>
-            <input type="number" name="fk_autor" required style="margin-top: 5px;">
+            <input type="number" name="fk_autor" class="form-control" required>
             <br>
-            <button type="submit" name="adicionarLivro" style="margin-top: 5px;">Adicionar Livro</button>
+            <button type="submit" name="adicionarLivro" class="btn btn-primary">Adicionar Livro</button>
         </form>
-        <form method="POST" style="margin-right: 50px;">
+        <form method="POST">
             <h2>Adicionar Leitor</h2>
             <label for="nome">Nome:</label>
-            <input type="text" name="nome" required style="margin-top: 5px;">
+            <input type="text" name="nome" class="form-control" required>
             <br>
             <label for="email">Email:</label>
-            <input type="email" name="email" required style="margin-top: 5px;">
+            <input type="email" name="email" class="form-control" required>
             <br>
             <label for="nascimento">Telefone:</label>
-            <input type="number" name="telefone" required style="margin-top: 5px;">
+            <input type="number" name="telefone" class="form-control" required >
             <br>
-            <button type="submit" name="adicionarLeitor" style="margin-top: 5px;">Adicionar Leitor</button>
+            <button type="submit" name="adicionarLeitor" class="btn btn-primary">Adicionar Leitor</button>
         </form>
-        <form method="POST" style="margin-right: 50px;">
+        <form method="POST">
             <h2>Criar Empréstimo</h2>
             <label for="data_emprestimo">Data do Empréstimo:</label>
-            <input type="date" name="data_emprestimo" required style="margin-top: 5px;">
+            <input type="date" name="data_emprestimo" class="form-control" required>
             <br>
             <label for="data_devolucao">Data da Devoulução:</label>
-            <input type="date" name="data_devolucao" required style="margin-top: 5px;">
+            <input type="date" name="data_devolucao" class="form-control" required>
             <br>
             <label for="fk_livro">Livro (ID):</label>
-            <input type="number" name="fk_livro" required style="margin-top: 5px;">
+            <input type="number" name="fk_livro" class="form-control" required>
             <br>
             <label for="fk_leitor">Leitor (ID):</label>
-            <input type="number" name="fk_leitor" required style="margin-top: 5px;">
+            <input type="number" name="fk_leitor" class="form-control" required>
             <br>
-            <button type="submit" name="criarEmprestimo" style="margin-top: 5px;">Criar Empréstimo</button>
+            <button type="submit" name="criarEmprestimo" class="btn btn-primary">Criar Empréstimo</button>
         </form>
     </div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </body>
 
 </html>

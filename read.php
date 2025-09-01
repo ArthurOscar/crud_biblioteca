@@ -1,7 +1,11 @@
 <?php
 
 include "db.php";
-echo "<div style='display: flex; gap: 20px;'>";
+echo "<div style='padding: 20px;'>";
+echo "<a href='update.php' class='btn btn-primary'> EDITAR VALORES </a>";
+echo "<a href='delete.php' class='btn btn-primary' style='margin-left:20px;'> EXCLUIR VALORES </a>";
+echo "</div>";
+echo "<div style='display: flex; gap: 20px; padding: 20px;'>";
 
 echo "<div>";
 echo "<h2>Autores</h2>";
@@ -9,7 +13,7 @@ $sql = "SELECT * FROM autores";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<table Border='1'>
+    echo "<table class='table table-striped' Border='1'>
         <tr>
         <th>ID Autor</th>
         <th>Nome</th>
@@ -38,10 +42,10 @@ $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 if ($pagina < 1) $pagina = 1;
 $offset = ($pagina - 1) * $livrosPorPagina;
 
-$filtro = "";
-if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
-    $filtro = $_POST['filtro'];
-    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR fk_autor LIKE '%$filtro%'";
+$filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
+if (isset($_GET['filtro']) && $_GET['filtro'] != "") {
+    $filtro = $_GET['filtro'];
+    $sql = "SELECT * FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR fk_autor LIKE '%$filtro%' LIMIT $livrosPorPagina OFFSET $offset";
     $sqlTotal = "SELECT COUNT(*) as total FROM livros WHERE genero LIKE '%$filtro%' OR titulo LIKE '%$filtro%' OR ano_publicacao LIKE '%$filtro%' OR fk_autor LIKE '%$filtro%'";
 } else {
     $sql = "SELECT * FROM livros LIMIT $livrosPorPagina OFFSET $offset";
@@ -49,13 +53,13 @@ if (isset($_POST['filtro']) && $_POST['filtro'] != "") {
 }
 $result = $conn->query($sql);
 
-echo "<form method='POST'>
-        <input type='text' name='filtro' placeholder='Filtrar por título, gênero ou ano' value='$filtro'>
+echo "<form method='GET'>
+        <input type='text' name='filtro' placeholder='Filtrar por título, gênero ou ano' value='" . htmlspecialchars($filtro, ENT_QUOTES) . "'>
         <button type='submit'>Filtrar</button>
  </form>";
 
 if ($result->num_rows > 0) {
-    echo "<table Border='1'>
+    echo "<table class='table table-striped' Border='1'>
         <tr>
             <th>ID Livro</th>
             <th>Título</th>
@@ -84,7 +88,8 @@ for ($i = 1; $i <= $totalPaginas; $i++) {
     if ($i == $pagina) {
         echo "$i ";
     } else {
-        echo "<a href='?pagina=$i'>$i</a> ";
+        $queryString = http_build_query(array_merge($_GET, ["pagina" => $i]));
+        echo "<a href='?$queryString?$queryString'>$i</a> ";
     }
 }
 echo "</div>";
@@ -96,7 +101,7 @@ $sql = "SELECT * FROM leitores";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<table Border='1'>
+    echo "<table class='table table-striped' Border='1'>
         <tr>
         <th>ID Leitor</th>
         <th>Nome</th>
@@ -152,7 +157,7 @@ if ($concluidos == 'sim') {
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<table Border='1'>
+    echo "<table class='table table-striped' Border='1'>
         <tr>
         <th>ID Empréstimo</th>
         <th>Data do Empréstimo</th>
@@ -189,4 +194,5 @@ include 'create.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Read</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
