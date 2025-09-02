@@ -1,9 +1,6 @@
 <?php
 
 include "db.php";
-echo "<div style='padding: 20px;'>";
-echo "<a href='manage.php' class='btn btn-primary'> EDITAR OU EXCLUIR VALORES </a>";
-echo "</div>";
 echo "<div style='display: flex; gap: 20px; padding: 20px;'>";
 
 echo "<div>";
@@ -12,7 +9,7 @@ $sql = "SELECT * FROM autores";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<table class='table table-striped' Border='1'>
+    echo "<table class='table table-bordered' Border='1'>
         <tr>
         <th>ID Autor</th>
         <th>Nome</th>
@@ -25,6 +22,10 @@ if ($result->num_rows > 0) {
         <td>{$row['nome']}</td>
         <td>{$row['nacionalidade']}</td>
         <td>{$row['ano_nascimento']}</td>
+        <td>
+            <a href='delete.php?id={$row['id_autor']}&&table=autores'>Excluir</a> |
+            <a href='update.php?id={$row['id_autor']}&&table=autores'>Editar</a>
+        </td>
         </tr>";
     };
     echo "</table>";
@@ -58,7 +59,7 @@ echo "<form method='GET'>
  </form>";
 
 if ($result->num_rows > 0) {
-    echo "<table class='table table-striped' Border='1'>
+    echo "<table class='table table-bordered' Border='1'>
         <tr>
             <th>ID Livro</th>
             <th>Título</th>
@@ -72,7 +73,12 @@ if ($result->num_rows > 0) {
         <td>{$row['titulo']}</td>
         <td>{$row['genero']}</td>
         <td>{$row['ano_publicacao']}</td>
-        <td>{$row['fk_autor']}</td></tr>";
+        <td>{$row['fk_autor']}</td>
+        <td>
+            <a href='delete.php?id={$row['id_livro']}&&table=livros'>Excluir</a> |
+            <a href='update.php?id={$row['id_livro']}&&table=livros'>Editar</a>
+        </td>
+        </tr>";
     };
     echo "</table>";
 } else {
@@ -93,6 +99,8 @@ for ($i = 1; $i <= $totalPaginas; $i++) {
 }
 echo "</div>";
 echo "</div>";
+echo "</div>";
+echo "<div style='display: flex; gap: 20px; padding: 20px;'>";
 
 echo "<div>";
 echo "<h2>Leitores</h2>";
@@ -100,7 +108,7 @@ $sql = "SELECT * FROM leitores";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<table class='table table-striped' Border='1'>
+    echo "<table class='table table-bordered' Border='1'>
         <tr>
         <th>ID Leitor</th>
         <th>Nome</th>
@@ -113,6 +121,10 @@ if ($result->num_rows > 0) {
         <td>{$row['nome']}</td>
         <td>{$row['email']}</td>
         <td>{$row['telefone']}</td>
+        <td>
+            <a href='delete.php?id={$row['id_leitor']}&&table=leitores'>Excluir</a> |
+            <a href='update.php?id={$row['id_leitor']}&&table=leitores'>Editar</a>
+        </td>
         </tr>";
     };
     echo "</table>";
@@ -156,7 +168,7 @@ if ($concluidos == 'sim') {
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<table class='table table-striped' Border='1px'>
+    echo "<table class='table table-bordered' Border='1'>
         <tr>
         <th>ID Empréstimo</th>
         <th>Data do Empréstimo</th>
@@ -175,23 +187,23 @@ if ($result->num_rows > 0) {
         <td>{$data_devolucao}</td>
         <td>{$row['livro']}</td>
         <td>{$row['leitor']}</td>
+        <td>
+            <a href='delete.php?id={$row['id_emprestimo']}&&table=emprestimos'>Excluir</a> |
+            <a href='update.php?id={$row['id_emprestimo']}&&table=emprestimos'>Editar</a>
+        </td>
         </tr>";
     };
     echo "</table>";
 } else {
-    echo "Não foi possivel encontrar nenhum empréstimo.<br>";
+    echo "Não foi possivel encontra nenhum empréstimo.<br>";
 }
 echo "</div>";
 echo "</div>";
-
-include 'create.php';
 ?>
-
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Read</title>
+    <title>Manage</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
