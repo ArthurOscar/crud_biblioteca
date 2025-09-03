@@ -207,3 +207,8 @@ echo "</div>";
     <title>Manage</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
+<body>
+    <div style="padding: 20px;">
+    <a href="read.php" style="text-decoration: none; color: white;"><button class="btn btn-primary">Voltar</button></a>
+    </div>
+</body>

@@ -40,10 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $conn->close();
                 }
             } else {
-                echo "Erro: Autor com ID $fk_autor não existe. <br>" . $conn->error;
+                echo "<script> alert('Erro: Autor com ID $fk_autor não existe.')</script>" . $conn->error;
             }
         } else {
-            echo "Erro: Ano de publicação inválido. Deve estar entre 1500 e 2025.<br>";
+            echo "<script> alert('Erro: Ano de publicação inválido. Deve estar entre 1500 e 2025.')</script>";
         }
     }
     if (isset($_POST["editarLeitor"])) {
@@ -85,13 +85,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $conn->close();
                     }
                 } else {
-                    echo "Erro: Leitor com ID $fk_leitor não existe. <br>" . $conn->error;
+                    echo "<script> alert('Erro: Leitor com ID $fk_leitor não existe.')</script>" . $conn->error;
                 }
             } else {
-                echo "Erro: Livro com ID $fk_livro não existe. <br>" . $conn->error;
+                echo "<script> alert('Erro: Livro com ID $fk_livro não existe.')</script>" . $conn->error;
             }
         } else {
-            echo "Erro: Data de devolução deve ser posterior à data de empréstimo.<br>";
+            echo "<script> alert('Erro: Data de devolução deve ser posterior à data de empréstimo.')</script>";
         }
     }
 }
@@ -210,6 +210,9 @@ if ($result->num_rows > 0) {
         </form>";
         };
         ?>
+    </div>
+    <div style="padding: 20px;">
+    <a href="manage.php" style="text-decoration: none; color: white;"><button class="btn btn-primary">Voltar</button></a>
     </div>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </body>

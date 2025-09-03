@@ -37,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $conn->close();
                 }
             } else {
-                echo "Erro: Autor com ID $fk_autor não existe. <br>" . $conn->error;
+                echo "<script> alert('Erro: Autor com ID $fk_autor não existe.')</script>" . $conn->error;
             }
         } else {
-            echo "Erro: Ano de publicação inválido. Deve estar entre 1500 e 2025.<br>";
+            echo "<script> alert('Erro: Ano de publicação inválido. Deve estar entre 1500 e 2025.')</script>";
         }
     }
     if (isset($_POST["adicionarLeitor"])) {
@@ -72,23 +72,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql = "SELECT id_leitor FROM leitores WHERE id_leitor = $fk_leitor";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
-                    $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor) VALUES ('$data_emprestimo', '$data_devolucao','$fk_livro', '$fk_leitor')";
-                    if ($conn->query($sql) === TRUE) {
-                        header("Location: read.php");
-                        $conn->close();
-                        exit();
+                    $sql = "SELECT COUNT(*) as total FROM emprestimos WHERE fk_leitor = $fk_leitor AND (data_devolucao >= CURDATE() OR data_devolucao_real IS NULL)";
+                    $result = $conn->query($sql);
+                    $row = $result->fetch_assoc();
+
+                    if ($row['total'] >= 3) {
+                        echo "<script> alert('O leitor $fk_leitor pode ter no máximo 3 empréstimos em aberto.')</script>";
                     } else {
-                        echo "Erro: " . $sql . "<br>" . $conn->error;
-                        $conn->close();
+                        $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor) 
+                            VALUES ('$data_emprestimo', '$data_devolucao','$fk_livro', '$fk_leitor')";
+                        if ($conn->query($sql) === TRUE) {
+                            header("Location: read.php");
+                            $conn->close();
+                            exit();
+                        } else {
+                            echo "Erro: " . $sql . "<br>" . $conn->error;
+                            $conn->close();
+                        }
                     }
                 } else {
-                    echo "Erro: Leitor com ID $fk_leitor não existe. <br>" . $conn->error;
+                    echo "<script> alert('Erro: Leitor com ID $fk_leitor não existe.')</script>" . $conn->error;
                 }
             } else {
-                echo "Erro: Livro com ID $fk_livro não existe. <br>" . $conn->error;
+                echo "<script> alert('Erro: Livro com ID $fk_livro não existe.')</script>" . $conn->error;
             }
         } else {
-            echo "Erro: Data de devolução deve ser posterior à data de empréstimo.<br>";
+            echo "<script> alert('Erro: Data de devolução deve ser posterior à data de empréstimo.')</script>";
         }
     }
 }
@@ -142,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="email" name="email" class="form-control" required>
             <br>
             <label for="nascimento">Telefone:</label>
-            <input type="number" name="telefone" class="form-control" required >
+            <input type="number" name="telefone" class="form-control" required>
             <br>
             <button type="submit" name="adicionarLeitor" class="btn btn-primary">Adicionar Leitor</button>
         </form>
