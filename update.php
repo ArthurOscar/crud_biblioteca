@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
+echo "<div class='texto'";
 if ($table === "autores") {
     $sql = "SELECT * FROM autores WHERE id_autor = $id";
 } elseif ($table === "livros") {
@@ -131,6 +131,7 @@ if ($result->num_rows > 0) {
     echo "</table>";
     echo "</div>";
 };
+echo "</div>";
 ?>
 
 <html lang="en">
@@ -142,10 +143,11 @@ if ($result->num_rows > 0) {
 </head>
 
 <body>
-    <div style="max-width: 20rem; padding: 20px;">
+    <div class="texto">
         <?php if ($_GET['table'] === "autores") {
-            echo "<form method='POST'>
-            <h2>Editar Autor</h2>
+            echo "<form method='POST' class='formCreate'>
+            <div class='conteudoForms'>
+            <h2 style='color:white;'>Editar Autor</h2>
             <label for='nome'>Nome:</label>
             <input type='text' name='nome' class='form-control' required>
             <br>
@@ -156,11 +158,13 @@ if ($result->num_rows > 0) {
             <input type='number' name='nascimento' class='form-control' required>
             <br>
             <button type='submit' name='editarAutor' class='btn btn-primary'>Editar Autor</button>
-        </form>";
+            </div>
+            </form>";
         };
         if ($_GET['table'] === "livros") {
-            echo "<form method='POST'>
-            <h2>Editar Livro</h2>
+            echo "<form method='POST' class='formCreate'>
+            <div class='conteudoForms'>
+            <h2 style='color:white;'>Editar Livro</h2>
             <label for='titulo'>Titulo:</label>
             <input type='text' name='titulo' class='form-control' required>
             <br>
@@ -174,11 +178,13 @@ if ($result->num_rows > 0) {
             <input type='number' name='fk_autor' class='form-control' required>
             <br>
             <button type='submit' name='editarLivro' class='btn btn-primary'>Editar Livro</button>
-        </form>";
+            </div>
+            </form>";
         };
         if ($_GET['table'] === "leitores") {
-            echo "<form method='POST'>
-            <h2>Editar Leitor</h2>
+            echo "<form method='POST' class='formCreate'>
+            <div class='conteudoForms'>
+            <h2 style='color:white;'>Editar Leitor</h2>
             <label for='nome'>Nome:</label>
             <input type='text' name='nome' class='form-control' required>
             <br>
@@ -189,11 +195,13 @@ if ($result->num_rows > 0) {
             <input type='number' name='telefone' class='form-control' required >
             <br>
             <button type='submit' name='editarLeitor' class='btn btn-primary'>Editar Leitor</button>
-        </form>";
+            </div>
+            </form>";
         };
         if ($_GET['table'] === "emprestimos") {
-            echo "<form method='POST'>
-            <h2>Editar Empréstimo</h2>
+            echo "<form method='POST' class='formCreate'>
+            <div class='conteudoForms'>
+            <h2 style='color:white;'>Editar Empréstimo</h2>
             <label for='data_emprestimo'>Data do Empréstimo:</label>
             <input type='date' name='data_emprestimo' class='form-control' required>
             <br>
@@ -207,13 +215,39 @@ if ($result->num_rows > 0) {
             <input type='number' name='fk_leitor' class='form-control' required>
             <br>
             <button type='submit' name='editarEmprestimo' class='btn btn-primary'>Editar Empréstimo</button>
-        </form>";
+            </div>
+            </form>";
         };
         ?>
     </div>
-    <div style="padding: 20px;">
-    <a href="manage.php" style="text-decoration: none; color: white;"><button class="btn btn-primary">Voltar</button></a>
+    <div class="texto"">
+        <a href="manage.php" style="text-decoration: none; color: white;"><button class="btn btn-primary">Voltar</button></a>
     </div>
+    <style>
+        .texto {
+            display: flex;
+            background-image: url('https://i.redd.it/7yx3n3w97b5a1.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.9;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .formCreate {
+            width: 30%;
+            border: 1px solid white;
+            border-radius: 10px;
+        }
+
+        .conteudoForms {
+            padding: 20px;
+        }
+
+        label {
+            color: white;
+        }
+    </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </body>
 

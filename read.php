@@ -1,10 +1,10 @@
 <?php
 
 include "db.php";
-echo "<div style='padding: 20px;'>";
+echo "<div class='texto');'>";
 echo "<a href='manage.php' class='btn btn-primary'> EDITAR OU EXCLUIR VALORES </a>";
 echo "</div>";
-echo "<div style='display: flex; gap: 20px; padding: 20px;'>";
+echo "<div class='texto'>";
 
 echo "<div>";
 echo "<h2>Autores</h2>";
@@ -85,7 +85,7 @@ $totalPaginas = ceil($totalLivros / $livrosPorPagina);
 echo "<div style='margin-top:10px;'>";
 for ($i = 1; $i <= $totalPaginas; $i++) {
     if ($i == $pagina) {
-        echo "$i ";
+        echo "<a style='color:white;'>$i</a>\n";
     } else {
         $queryString = http_build_query(array_merge($_GET, ["pagina" => $i]));
         echo "<a href='?$queryString?$queryString'>$i</a> ";
@@ -195,3 +195,17 @@ include 'create.php';
     <title>Read</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
+<style>
+    h2{
+        color: white;
+    }
+    .texto{
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        background-image: url('https://i.redd.it/7yx3n3w97b5a1.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: 0.9;
+    }
+</style>

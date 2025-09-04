@@ -112,8 +112,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div style="display: flex; gap: 10%; padding: 20px; ">
-        <form method="POST">
+    <div class="texto">
+        <form method="POST" class="formCreate">
+            <div class="conteudoForms">
             <h2>Adicionar Autor</h2>
             <label for="nome">Nome:</label>
             <input type="text" name="nome" class="form-control" required>
@@ -125,8 +126,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="number" name="nascimento" class="form-control" required>
             <br>
             <button type="submit" name="adicionarAutor" class="btn btn-primary">Adicionar Autor</button>
+            </div>
         </form>
-        <form method="POST">
+        <form method="POST" class="formCreate">
+            <div class="conteudoForms">
             <h2>Adicionar Livro</h2>
             <label for="titulo">Titulo:</label>
             <input type="text" name="titulo" class="form-control" required>
@@ -141,8 +144,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="number" name="fk_autor" class="form-control" required>
             <br>
             <button type="submit" name="adicionarLivro" class="btn btn-primary">Adicionar Livro</button>
+            </div>
         </form>
-        <form method="POST">
+        <form method="POST" class="formCreate">
+            <div class="conteudoForms">
             <h2>Adicionar Leitor</h2>
             <label for="nome">Nome:</label>
             <input type="text" name="nome" class="form-control" required>
@@ -154,24 +159,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="number" name="telefone" class="form-control" required>
             <br>
             <button type="submit" name="adicionarLeitor" class="btn btn-primary">Adicionar Leitor</button>
+            </div>
         </form>
-        <form method="POST">
-            <h2>Criar Empréstimo</h2>
-            <label for="data_emprestimo">Data do Empréstimo:</label>
-            <input type="date" name="data_emprestimo" class="form-control" required>
-            <br>
-            <label for="data_devolucao">Data da Devoulução:</label>
-            <input type="date" name="data_devolucao" class="form-control" required>
-            <br>
-            <label for="fk_livro">Livro (ID):</label>
-            <input type="number" name="fk_livro" class="form-control" required>
-            <br>
-            <label for="fk_leitor">Leitor (ID):</label>
-            <input type="number" name="fk_leitor" class="form-control" required>
-            <br>
-            <button type="submit" name="criarEmprestimo" class="btn btn-primary">Criar Empréstimo</button>
+        <form method="POST" class="formCreate">
+            <div class="conteudoForms">
+                <h2>Criar Empréstimo</h2>
+                <label for="data_emprestimo">Data do Empréstimo:</label>
+                <input type="date" name="data_emprestimo" class="form-control" required>
+                <br>
+                <label for="data_devolucao">Data da Devoulução:</label>
+                <input type="date" name="data_devolucao" class="form-control" required>
+                <br>
+                <label for="fk_livro">Livro (ID):</label>
+                <input type="number" name="fk_livro" class="form-control" required>
+                <br>
+                <label for="fk_leitor">Leitor (ID):</label>
+                <input type="number" name="fk_leitor" class="form-control" required>
+                <br>
+                <button type="submit" name="criarEmprestimo" class="btn btn-primary">Criar Empréstimo</button>
+            </div>
         </form>
     </div>
+    <style>
+        .texto {
+            display: flex;
+            background-image: url('https://i.redd.it/7yx3n3w97b5a1.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.9;
+            justify-content: space-between;
+        }
+
+        .formCreate {
+            width: 40%;
+            border: 1px solid white;
+            border-radius: 10px;
+        }
+
+        .conteudoForms{
+            padding: 20px;
+        }
+
+        label {
+            color: white;
+        }
+    </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </body>
 
