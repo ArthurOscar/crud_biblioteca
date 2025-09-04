@@ -80,15 +80,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if ($totalEmprestimos >= 3) {
                             echo "<script>alert('Não é possível realizar mais de 3 empréstimos. Esse leitor já possui $totalEmprestimos empréstimos em aberto.');</script>";
                         } else {
-                            $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor, situacao) 
-                            VALUES ('$data_emprestimo', '$data_devolucao', '$fk_livro', '$fk_leitor', 0)";
-                            if ($conn->query($sql) === TRUE) {
-                                echo "<script>window.location.href='read.php';</script>";
-                                $conn->close();
-                                exit();
+                            $sql_livro = "SELECT situacao_emprestimo FROM livros WHERE id_livro = $fk_livro";
+                            $result = $conn->query($sql_livro);
+                            $row = $result->fetch_assoc();
+                            if ($row['situacao_emprestimo'] == 1) {
+                                echo "<script>alert('Este livro não está disponivel.');</script>";
                             } else {
-                                echo "Erro: " . $sql . "<br>" . $conn->error;
-                                $conn->close();
+                                $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor, situacao) 
+                                VALUES ('$data_emprestimo', '$data_devolucao', '$fk_livro', '$fk_leitor', 0)";
+                                if ($conn->query($sql) === TRUE) {
+                                    $sql_update = "UPDATE livros SET situacao_emprestimo = 1 WHERE id_livro = $fk_livro";
+                                    if ($conn->query($sql_update) === TRUE) {
+                                        echo "<script>window.location.href='read.php';</script>";
+                                        $conn->close();
+                                        exit();
+                                    } else {
+                                        echo "Erro ao atualizar livro: " . $conn->error;
+                                    }
+                                } else {
+                                    echo "Erro: " . $sql . "<br>" . $conn->error;
+                                }
                             }
                         }
                     } else {

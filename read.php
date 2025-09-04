@@ -65,14 +65,22 @@ if ($result->num_rows > 0) {
             <th>Gênero</th>
             <th>Ano de Publicação</th>
             <th>ID Autor</th>
+            <th>Situação</th>
         </tr>";
     while ($row = $result->fetch_assoc()) {
+        if($row['situacao_emprestimo'] == 0){
+            $situacao_livro = 'Disponivel';
+        } else {
+            $situacao_livro = 'Não disponivel';
+        }
         echo "<tr>
         <td>{$row['id_livro']}</td>
         <td>{$row['titulo']}</td>
         <td>{$row['genero']}</td>
         <td>{$row['ano_publicacao']}</td>
-        <td>{$row['fk_autor']}</td></tr>";
+        <td>{$row['fk_autor']}</td>
+        <td>$situacao_livro</td>
+        </tr>";
     };
     echo "</table>";
 } else {

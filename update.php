@@ -78,9 +78,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($result->num_rows > 0) {
                     $sql = "UPDATE emprestimos SET data_emprestimo='$data_emprestimo', data_devolucao='$data_devolucao', fk_livro='$fk_livro', fk_leitor='$fk_leitor', situacao=$situacao WHERE id_emprestimo = $id";
                     if ($conn->query($sql) === TRUE) {
-                        header("Location: read.php");
-                        $conn->close();
-                        exit();
+                        if ($situacao === '1') {
+                            $sql = "UPDATE livros SET situacao_emprestimo = 0 WHERE id_livro = $fk_livro";
+                            if ($conn->query($sql) === TRUE) {
+                                header("Location: read.php");
+                                $conn->close();
+                                exit();
+                            }
+                        }
                     } else {
                         echo "Erro: " . $sql . "<br>" . $conn->error;
                         $conn->close();
@@ -228,7 +233,7 @@ echo "</div>";
         ?>
     </div>
     <div class="texto"">
-        <a href="manage.php" style="text-decoration: none; color: white;"><button class="btn btn-primary">Voltar</button></a>
+        <a href=" manage.php" style="text-decoration: none; color: white;"><button class="btn btn-primary">Voltar</button></a>
     </div>
     <style>
         .texto {

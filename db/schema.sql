@@ -14,6 +14,7 @@ CREATE TABLE livros(
     titulo VARCHAR(100) NOT NULL,
     genero VARCHAR(100) NOT NULL,
     ano_publicacao INT NOT NULL,
+    situacao_emprestimo BOOLEAN NOT NULL DEFAULT(FALSE),
     fk_autor INT NOT NULL,
     FOREIGN KEY (fk_autor) REFERENCES autores(id_autor)
 );

@@ -74,9 +74,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['resposta'])) {
                 header("Location: read.php");
             }
         } elseif ($tabela === "emprestimos") {
+            $sql = "SELECT fk_livro FROM emprestimos WHERE id_emprestimo = $id";
+            $result = $conn->query($sql);
+            $row = $result->fetch_assoc();
             $sql = "DELETE FROM $tabela WHERE id_emprestimo=$id";
             if ($conn->query($sql) === true) {
-                echo "Registro excluído com sucesso.";
+                $fk_livro = $row['fk_livro'];
+                $sql_update = "UPDATE livros SET situacao_emprestimo = 0 WHERE id_livro = $fk_livro";
+                if ($conn->query($sql_update) === TRUE) {
+                    header("Location: read.php");
+                    $conn->close();
+                    exit();
+                }
             } else {
                 echo "Erro" . $sql . "<br>" . $conn->error;
             }
