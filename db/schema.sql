@@ -29,6 +29,7 @@ CREATE TABLE emprestimos(
     id_emprestimo INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     data_emprestimo DATE NOT NULL DEFAULT(CURRENT_DATE),
     data_devolucao DATE NOT NULL,
+    situacao BOOLEAN NOT NULL DEFAULT(FALSE),
     fk_livro INT NOT NULL,
     fk_leitor INT NOT NULL,
     FOREIGN KEY (fk_livro) REFERENCES livros(id_livro),

@@ -67,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $data_devolucao = $_POST["data_devolucao"];
         $fk_livro = $_POST["fk_livro"];
         $fk_leitor = $_POST["fk_leitor"];
+        $situacao = $_POST["situacao"];
 
         if ($data_devolucao > $data_emprestimo) {
             $sql = "SELECT id_livro FROM livros WHERE id_livro = $fk_livro";
@@ -75,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql = "SELECT id_leitor FROM leitores WHERE id_leitor = $fk_leitor";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
-                    $sql = "UPDATE emprestimos SET data_emprestimo='$data_emprestimo', data_devolucao='$data_devolucao', fk_livro='$fk_livro', fk_leitor='$fk_leitor' WHERE id_emprestimo = $id";
+                    $sql = "UPDATE emprestimos SET data_emprestimo='$data_emprestimo', data_devolucao='$data_devolucao', fk_livro='$fk_livro', fk_leitor='$fk_leitor', situacao=$situacao WHERE id_emprestimo = $id";
                     if ($conn->query($sql) === TRUE) {
                         header("Location: read.php");
                         $conn->close();
@@ -120,7 +121,7 @@ if ($result->num_rows > 0) {
     }
     echo "</tr>";
 
-    $result->data_seek(0); // volta pro início do resultado
+    $result->data_seek(0);
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         foreach ($row as $value) {
@@ -214,6 +215,12 @@ echo "</div>";
             <label for='fk_leitor'>Leitor (ID):</label>
             <input type='number' name='fk_leitor' class='form-control' required>
             <br>
+            <label for='situacao'>Situação:</label><br>
+            <select class='form-select' aria-label='Default select example' name='situacao'>
+                <option selected>Seleciona um das opções</option>
+                <option value='1'>Concluído</option>
+                <option value='0'>Não concluído</option>
+            </select><br>
             <button type='submit' name='editarEmprestimo' class='btn btn-primary'>Editar Empréstimo</button>
             </div>
             </form>";

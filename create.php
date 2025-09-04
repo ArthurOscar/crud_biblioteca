@@ -72,23 +72,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql = "SELECT id_leitor FROM leitores WHERE id_leitor = $fk_leitor";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
-                    $sql = "SELECT COUNT(*) as total FROM emprestimos WHERE fk_leitor = $fk_leitor AND (data_devolucao >= CURDATE() OR data_devolucao_real IS NULL)";
-                    $result = $conn->query($sql);
-                    $row = $result->fetch_assoc();
-
-                    if ($row['total'] >= 3) {
-                        echo "<script> alert('O leitor $fk_leitor pode ter no máximo 3 empréstimos em aberto.')</script>";
-                    } else {
-                        $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor) 
+                    $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor) 
                             VALUES ('$data_emprestimo', '$data_devolucao','$fk_livro', '$fk_leitor')";
-                        if ($conn->query($sql) === TRUE) {
-                            header("Location: read.php");
-                            $conn->close();
-                            exit();
-                        } else {
-                            echo "Erro: " . $sql . "<br>" . $conn->error;
-                            $conn->close();
-                        }
+                    if ($conn->query($sql) === TRUE) {
+                        header("Location: read.php");
+                        $conn->close();
+                        exit();
+                    } else {
+                        echo "Erro: " . $sql . "<br>" . $conn->error;
+                        $conn->close();
                     }
                 } else {
                     echo "<script> alert('Erro: Leitor com ID $fk_leitor não existe.')</script>" . $conn->error;
@@ -108,57 +100,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Registros</title>
+    <title>Registros</title>
 </head>
 
 <body>
     <div class="texto">
         <form method="POST" class="formCreate">
             <div class="conteudoForms">
-            <h2>Adicionar Autor</h2>
-            <label for="nome">Nome:</label>
-            <input type="text" name="nome" class="form-control" required>
-            <br>
-            <label for="nacionalidade">Nacionalidade:</label>
-            <input type="text" name="nacionalidade" class="form-control" required>
-            <br>
-            <label for="nascimento">Ano de nascimento:</label>
-            <input type="number" name="nascimento" class="form-control" required>
-            <br>
-            <button type="submit" name="adicionarAutor" class="btn btn-primary">Adicionar Autor</button>
+                <h2>Adicionar Autor</h2>
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" class="form-control" required>
+                <br>
+                <label for="nacionalidade">Nacionalidade:</label>
+                <input type="text" name="nacionalidade" class="form-control" required>
+                <br>
+                <label for="nascimento">Ano de nascimento:</label>
+                <input type="number" name="nascimento" class="form-control" required>
+                <br>
+                <button type="submit" name="adicionarAutor" class="btn btn-primary">Adicionar Autor</button>
             </div>
         </form>
         <form method="POST" class="formCreate">
             <div class="conteudoForms">
-            <h2>Adicionar Livro</h2>
-            <label for="titulo">Titulo:</label>
-            <input type="text" name="titulo" class="form-control" required>
-            <br>
-            <label for="genero">Genêro:</label>
-            <input type="text" name="genero" class="form-control" required>
-            <br>
-            <label for="publicacao">Ano de Publicação:</label>
-            <input type="number" name="publicacao" class="form-control" required>
-            <br>
-            <label for="fk_autor">Autor (ID):</label>
-            <input type="number" name="fk_autor" class="form-control" required>
-            <br>
-            <button type="submit" name="adicionarLivro" class="btn btn-primary">Adicionar Livro</button>
+                <h2>Adicionar Livro</h2>
+                <label for="titulo">Titulo:</label>
+                <input type="text" name="titulo" class="form-control" required>
+                <br>
+                <label for="genero">Genêro:</label>
+                <input type="text" name="genero" class="form-control" required>
+                <br>
+                <label for="publicacao">Ano de Publicação:</label>
+                <input type="number" name="publicacao" class="form-control" required>
+                <br>
+                <label for="fk_autor">Autor (ID):</label>
+                <input type="number" name="fk_autor" class="form-control" required>
+                <br>
+                <button type="submit" name="adicionarLivro" class="btn btn-primary">Adicionar Livro</button>
             </div>
         </form>
         <form method="POST" class="formCreate">
             <div class="conteudoForms">
-            <h2>Adicionar Leitor</h2>
-            <label for="nome">Nome:</label>
-            <input type="text" name="nome" class="form-control" required>
-            <br>
-            <label for="email">Email:</label>
-            <input type="email" name="email" class="form-control" required>
-            <br>
-            <label for="nascimento">Telefone:</label>
-            <input type="number" name="telefone" class="form-control" required>
-            <br>
-            <button type="submit" name="adicionarLeitor" class="btn btn-primary">Adicionar Leitor</button>
+                <h2>Adicionar Leitor</h2>
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" class="form-control" required>
+                <br>
+                <label for="email">Email:</label>
+                <input type="email" name="email" class="form-control" required>
+                <br>
+                <label for="nascimento">Telefone:</label>
+                <input type="number" name="telefone" class="form-control" required>
+                <br>
+                <button type="submit" name="adicionarLeitor" class="btn btn-primary">Adicionar Leitor</button>
             </div>
         </form>
         <form method="POST" class="formCreate">
@@ -196,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 10px;
         }
 
-        .conteudoForms{
+        .conteudoForms {
             padding: 20px;
         }
 

@@ -145,21 +145,21 @@ echo "<form method='POST'>
 $concluidos = $_POST['emprestimos_cocluidos'] ?? 'todos';
 $hoje = date('Y-m-d');
 if ($concluidos == 'sim') {
-    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao,
+    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao, situacao,
                livros.titulo AS livro, leitores.nome AS leitor
         FROM emprestimos e
         JOIN livros ON fk_livro = id_livro
         JOIN leitores ON fk_leitor = id_leitor
         WHERE data_devolucao < '$hoje'";
 } elseif ($concluidos == 'nao') {
-    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao,
+    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao, situacao,
                livros.titulo AS livro, leitores.nome AS leitor
         FROM emprestimos e
         JOIN livros ON fk_livro = id_livro
         JOIN leitores ON fk_leitor = id_leitor
         WHERE data_devolucao >= '$hoje'";
 } else {
-    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao,
+    $sql = "SELECT id_emprestimo, data_emprestimo, data_devolucao, situacao,
                livros.titulo AS livro, leitores.nome AS leitor
         FROM emprestimos e
         JOIN livros ON fk_livro = id_livro
@@ -175,18 +175,25 @@ if ($result->num_rows > 0) {
         <th>Data da devolução</th>
         <th>Livro</th>
         <th>Leitor</th>
+        <th>Situação</th>
         </tr>";
     while ($row = $result->fetch_assoc()) {
         $data_emprestimo = $row['data_emprestimo'];
         $data_emprestimo = date('d/m/Y', strtotime($data_emprestimo));
         $data_devolucao = $row['data_devolucao'];
         $data_devolucao = date('d/m/Y', strtotime($data_devolucao));
+        if($row['situacao'] == 0){
+            $situacao = 'Não concluido';
+        } else {
+            $situacao = 'Concluido';
+        }
         echo "<tr>
         <td>{$row['id_emprestimo']}</td>
         <td>{$data_emprestimo}</td>
         <td>{$data_devolucao}</td>
         <td>{$row['livro']}</td>
         <td>{$row['leitor']}</td>
+        <td>$situacao</td>
         <td>
             <a href='delete.php?id={$row['id_emprestimo']}&&table=emprestimos'>Excluir</a> |
             <a href='update.php?id={$row['id_emprestimo']}&&table=emprestimos'>Editar</a>
