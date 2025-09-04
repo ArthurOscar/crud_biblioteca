@@ -72,15 +72,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql = "SELECT id_leitor FROM leitores WHERE id_leitor = $fk_leitor";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
-                    $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor) 
-                            VALUES ('$data_emprestimo', '$data_devolucao','$fk_livro', '$fk_leitor')";
-                    if ($conn->query($sql) === TRUE) {
-                        header("Location: read.php");
-                        $conn->close();
-                        exit();
+                    $sql_total = "SELECT COUNT(*) AS total FROM emprestimos WHERE fk_leitor = $fk_leitor AND situacao = 0";
+                    $result = $conn->query($sql_total);
+                    if ($result) {
+                        $row = $result->fetch_assoc();
+                        $totalEmprestimos = $row['total'];
+                        if ($totalEmprestimos >= 3) {
+                            echo "<script>alert('Não é possível realizar mais de 3 empréstimos. Esse leitor já possui $totalEmprestimos empréstimos em aberto.');</script>";
+                        } else {
+                            $sql = "INSERT INTO emprestimos (data_emprestimo, data_devolucao, fk_livro, fk_leitor, situacao) 
+                            VALUES ('$data_emprestimo', '$data_devolucao', '$fk_livro', '$fk_leitor', 0)";
+                            if ($conn->query($sql) === TRUE) {
+                                echo "<script>window.location.href='read.php';</script>";
+                                $conn->close();
+                                exit();
+                            } else {
+                                echo "Erro: " . $sql . "<br>" . $conn->error;
+                                $conn->close();
+                            }
+                        }
                     } else {
-                        echo "Erro: " . $sql . "<br>" . $conn->error;
-                        $conn->close();
+                        echo "Erro ao consultar empréstimos: " . $conn->error;
                     }
                 } else {
                     echo "<script> alert('Erro: Leitor com ID $fk_leitor não existe.')</script>" . $conn->error;
