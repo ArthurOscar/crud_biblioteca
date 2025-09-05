@@ -68,7 +68,7 @@ if ($result->num_rows > 0) {
             <th>Situação</th>
         </tr>";
     while ($row = $result->fetch_assoc()) {
-        if($row['situacao_emprestimo'] == 0){
+        if ($row['situacao_emprestimo'] == 0) {
             $situacao_livro = 'Disponivel';
         } else {
             $situacao_livro = 'Não disponivel';
@@ -116,11 +116,27 @@ if ($result->num_rows > 0) {
         <th>Telefone</th>
         </tr>";
     while ($row = $result->fetch_assoc()) {
+        $idLeitor = $row['id_leitor'];
+        $sqlLivros = "SELECT l.titulo 
+                      FROM emprestimos e
+                      JOIN livros l ON e.fk_livro = l.id_livro
+                      WHERE e.fk_leitor = $idLeitor AND e.situacao = 0";
+        $resLivros = $conn->query($sqlLivros);
+        $livrosArray = [];
+        while ($livro = $resLivros->fetch_assoc()) {
+            $livrosArray[] = $livro['titulo'];
+        }
+        if (count($livrosArray) > 0) {
+            $livrosStr = implode(", ", $livrosArray);
+        } else {
+            $livrosStr = "Nenhum livro emprestado.";
+        }
         echo "<tr>
         <td>{$row['id_leitor']}</td>
         <td>{$row['nome']}</td>
         <td>{$row['email']}</td>
         <td>{$row['telefone']}</td>
+        <td><button onclick=\"alert('Livros de {$row['nome']}: $livrosStr')\">Ver livros</button></td>
         </tr>";
     };
     echo "</table>";
@@ -177,7 +193,7 @@ if ($result->num_rows > 0) {
         $data_emprestimo = date('d/m/Y', strtotime($data_emprestimo));
         $data_devolucao = $row['data_devolucao'];
         $data_devolucao = date('d/m/Y', strtotime($data_devolucao));
-        if($row['situacao'] == 0){
+        if ($row['situacao'] == 0) {
             $situacao = 'Não concluido';
         } else {
             $situacao = 'Concluido';
@@ -210,10 +226,11 @@ include 'create.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <style>
-    h2{
+    h2 {
         color: white;
     }
-    .texto{
+
+    .texto {
         display: flex;
         gap: 20px;
         padding: 20px;
