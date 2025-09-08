@@ -1,3 +1,5 @@
+USE crud_biblioteca;
+
 INSERT INTO autores (nome, nacionalidade, ano_nascimento) VALUES
 ('Machado de Assis', 'Brasileiro', 1839),
 ('José Saramago', 'Português', 1922),
